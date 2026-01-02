@@ -7,7 +7,6 @@ const speedInput = document.getElementById("speed");
 
 let array = [];
 
-// 配列生成
 function generateArray() {
   container.innerHTML = "";
   array = [];
@@ -22,12 +21,11 @@ function generateArray() {
   }
 }
 
-// Sleep関数
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-// Bubble Sort 可視化
+
 async function bubbleSort() {
   const bars = document.getElementsByClassName("bar");
   const n = array.length;
@@ -54,7 +52,6 @@ async function bubbleSort() {
   if(bars[0]) bars[0].style.backgroundColor = "green";
 }
 
-// Selection Sort 可視化
 async function selectionSort() {
   const bars = document.getElementsByClassName("bar");
   const n = array.length;
@@ -117,10 +114,71 @@ async function insertionSort() {
   }
 }
 
-// ボタンイベント
-generateBtn.addEventListener("click", generateArray);
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
-sortBtn.addEventListener("click", () => {
+function getSpeed() {
+  return 1000 - parseInt(speedInput.value);
+}
+
+
+async function mergeSort(start, end) {
+  if (end - start <= 1) return;
+
+  const mid = Math.floor((start + end) / 2);
+
+  await mergeSort(start, mid);
+  await mergeSort(mid, end);
+  await merge(start, mid, end);
+}
+
+async function merge(start, mid, end) {
+  let temp = [];
+  let i = start;
+  let j = mid;
+
+  while (i < mid && j < end) {
+    highlight(i, j);
+    await sleep(speed);
+
+    if (array[i] < array[j]) {
+      temp.push(array[i++]);
+    } else {
+      temp.push(array[j++]);
+    }
+  }
+
+  while (i < mid) temp.push(array[i++]);
+  while (j < end) temp.push(array[j++]);
+
+  for (let k = 0; k < temp.length; k++) {
+    array[start + k] = temp[k];
+    updateBar(start + k);
+    await sleep(speed);
+  }
+}
+
+function updateBar(index) {
+  const bars = document.getElementsByClassName("bar");
+  bars[index].style.height = `${array[index]}px`;
+}
+
+function highlight(i, j) {
+  const bars = document.getElementsByClassName("bar");
+  bars[i].style.background = "red";
+  bars[j].style.background = "red";
+
+  setTimeout(() => {
+    bars[i].style.background = "";
+    bars[j].style.background = "";
+  }, speed);
+}
+
+
+generateBtn.addEventListener("click", generateArray);
+ 
+sortBtn.addEventListener("click", async () => {
   const algo = algorithmSelect.value;
   switch(algo){
     case "bubble":
@@ -131,6 +189,9 @@ sortBtn.addEventListener("click", () => {
       break;
     case "insertion":
       insertionSort();
+      break;
+    case "merge":
+      await mergeSort(0, array.length);
       break;
   }
 });
