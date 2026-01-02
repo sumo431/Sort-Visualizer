@@ -1,0 +1,16 @@
+#array-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 300px;
+  width: 90%;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  background: #fff;
+}
+
+.bar {
+  width: 10px;
+  margin: 1px;
+  background-color: steelblue;
+}
