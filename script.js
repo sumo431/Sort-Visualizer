@@ -175,6 +175,18 @@ function highlight(i, j) {
   }, speed);
 }
 
+async function quickSort(low, high) {
+  if(low < high){
+    const pi = await partition(low, high);
+    await quickSort(low, pi - 1);
+    await quickSort(pi + 1, high);
+  }
+}
+
+async function partition(low, high) {
+  
+}
+
 
 generateBtn.addEventListener("click", generateArray);
  
@@ -192,6 +204,9 @@ sortBtn.addEventListener("click", async () => {
       break;
     case "merge":
       await mergeSort(0, array.length);
+      break;
+    case "quick":
+      await quickSort(0, array.length - 1);
       break;
   }
 });
