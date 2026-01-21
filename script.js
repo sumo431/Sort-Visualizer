@@ -114,14 +114,9 @@ async function insertionSort() {
   }
 }
 
-function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function getSpeed() {
   return 1000 - parseInt(speedInput.value);
 }
-
 
 async function mergeSort(start, end) {
   if (end - start <= 1) return;
@@ -176,31 +171,74 @@ function highlight(i, j) {
 }
 
 async function quickSort(low, high) {
-  if(low < high){
+  if (low < high) {
     const pi = await partition(low, high);
     await quickSort(low, pi - 1);
     await quickSort(pi + 1, high);
   }
 }
 
-async function partition(low, high) {
-  
+async function swap(i, j) {
+  const bars = document.getElementsByClassName("bar");
+
+  bars[i].style.backgroundColor = "red";
+  bars[j].style.backgroundColor = "red";
+  await sleep(getSpeed());
+
+  [array[i], array[j]] = [array[j], array[i]];
+  bars[i].style.height = `${array[i]}px`;
+  bars[j].style.height = `${array[j]}px`;
+
+  await sleep(getSpeed());
+  bars[i].style.backgroundColor = "steelblue";
+  bars[j].style.backgroundColor = "steelblue";
 }
 
+async function partition(low, high) {
+  const bars = document.getElementsByClassName("bar");
+  let pivot = array[high];
+  bars[high].style.backgroundColor = "yellow";
+
+  let i = low - 1;
+
+  for (let j = low; j < high; j++) {
+    bars[j].style.backgroundColor = "red";
+    await sleep(getSpeed());
+
+    if (array[j] < pivot) {
+      i++;
+      await swap(i, j);
+    }
+
+    bars[j].style.backgroundColor = "steelblue";
+  }
+
+  await swap(i + 1, high);
+  bars[i + 1].style.backgroundColor = "green"; // pivot確定
+  return i + 1;
+}
 
 generateBtn.addEventListener("click", generateArray);
- 
+
+//when sort completed, all bar will be green
+function markAllGreen() {
+  const bars = document.getElementsByClassName("bar");
+  for (let i = 0; i < bars.length; i++) {
+    bars[i].style.backgroundColor = "green";
+  }
+}
+
 sortBtn.addEventListener("click", async () => {
   const algo = algorithmSelect.value;
   switch(algo){
     case "bubble":
-      bubbleSort();
+      await bubbleSort();
       break;
     case "selection":
-      selectionSort();
+      await selectionSort();
       break;
     case "insertion":
-      insertionSort();
+      await insertionSort();
       break;
     case "merge":
       await mergeSort(0, array.length);
@@ -209,6 +247,9 @@ sortBtn.addEventListener("click", async () => {
       await quickSort(0, array.length - 1);
       break;
   }
+  //after finished sort it all green
+  markAllGreen();
 });
+
 
 generateArray();
