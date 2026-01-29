@@ -1,11 +1,10 @@
 # Sorting Visualizer
-(Not Complete Yet)
 
 A simple web-based application to visualize sorting algorithms in real-time.
 
 ## Features
 
-- Visualize Bubble Sort, Selection Sort, and Insertion Sort
+- Visualize Bubble Sort, Selection Sort, Insertion Sort, Merge Sort, and Quick Sort
 - Adjustable array size
 - Adjustable animation speed
 - Color-coded bars:
